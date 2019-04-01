@@ -1,13 +1,13 @@
 ASCII Table Writer
 =========
 
-[![Build Status](https://travis-ci.org/olekukonko/tablewriter.png?branch=master)](https://travis-ci.org/olekukonko/tablewriter)
-[![Total views](https://img.shields.io/sourcegraph/rrc/github.com/olekukonko/tablewriter.svg)](https://sourcegraph.com/github.com/olekukonko/tablewriter)
-[![Godoc](https://godoc.org/github.com/olekukonko/tablewriter?status.svg)](https://godoc.org/github.com/olekukonko/tablewriter)
+[![Build Status](https://travis-ci.org/openacid/tablewriter.png?branch=master)](https://travis-ci.org/openacid/tablewriter)
+[![Total views](https://img.shields.io/sourcegraph/rrc/github.com/openacid/tablewriter.svg)](https://sourcegraph.com/github.com/openacid/tablewriter)
+[![Godoc](https://godoc.org/github.com/openacid/tablewriter?status.svg)](https://godoc.org/github.com/openacid/tablewriter)
 
 Generate ASCII table on the fly ...  Installation is simple as
 
-    go get github.com/olekukonko/tablewriter
+    go get github.com/openacid/tablewriter
 
 
 #### Features
@@ -278,7 +278,7 @@ import (
     "strings"
     "fmt"
 
-    "github.com/olekukonko/tablewriter"
+    "github.com/openacid/tablewriter"
 )
 
 func main() {
