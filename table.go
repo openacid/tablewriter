@@ -119,6 +119,8 @@ func NewWriter(writer io.Writer) *Table {
 	return t
 }
 
+// SetContent set table rows by a slice of a struct.
+// Headers are also set to stuct field name.
 func (t *Table) SetContent(rows interface{}) {
 	rs := reflect.ValueOf(rows)
 	if rs.Kind() != reflect.Slice {
@@ -152,6 +154,12 @@ func (t *Table) SetContent(rows interface{}) {
 	t.SetHeader(headers)
 	t.AppendBulk(strRows)
 }
+
+// ClearHeader remove all headers.
+func (t *Table) ClearHeader() {
+	t.headers = [][]string{}
+}
+
 
 // Render table output
 func (t *Table) Render() {

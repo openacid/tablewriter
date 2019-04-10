@@ -1182,6 +1182,39 @@ func TestSetContentWithPointer(t *testing.T) {
 	checkEqual(t, buf.String(), want)
 }
 
+func TestClearHeader(t *testing.T) {
+
+	buf := &bytes.Buffer{}
+	tb := NewWriter(buf)
+
+	i1, i2 := 1, 2
+	s1, s2 := "a", "b"
+
+	cont := []*struct {
+		Int      *int
+		Str      *string
+		IntSlice []int
+	}{
+		{&i1, &s1, []int{i1, i2}},
+		{&i2, &s2, []int{i2, i1}},
+	}
+
+	want := `
++-----+-----+----------+
+| 1   |  a  |    [1 2] |
+| 2   |  b  |    [2 1] |
++-----+-----+----------+
+`[1:]
+
+	tb.SetContent(cont)
+	tb.SetColMinWidth(2, 8)
+	tb.SetColumnAlignment("<|>")
+	tb.ClearHeader()
+	tb.Render()
+
+	checkEqual(t, buf.String(), want)
+}
+
 func TestTitle(t *testing.T) {
 	ts := []struct {
 		text string
