@@ -1115,8 +1115,8 @@ func TestCustomAlignString(t *testing.T) {
 func TestSetContent(t *testing.T) {
 
 	var (
-		buf   = &bytes.Buffer{}
-		table = NewWriter(buf)
+		buf = &bytes.Buffer{}
+		tb  = NewWriter(buf)
 
 		cont = []struct {
 			Int      int
@@ -1139,11 +1139,45 @@ func TestSetContent(t *testing.T) {
 +-----+-----+----------+
 `[1:]
 	)
-	table.SetContent(cont)
-	table.SetFooter(footer)
-	table.SetColMinWidth(2, 8)
-	table.SetColumnAlignment("<|>")
-	table.Render()
+	tb.SetContent(cont)
+	tb.SetFooter(footer)
+	tb.SetColMinWidth(2, 8)
+	tb.SetColumnAlignment("<|>")
+	tb.Render()
+
+	checkEqual(t, buf.String(), want)
+}
+
+func TestSetContentWithPointer(t *testing.T) {
+
+	buf := &bytes.Buffer{}
+	tb := NewWriter(buf)
+
+	i1, i2 := 1, 2
+	s1, s2 := "a", "b"
+
+	cont := []*struct {
+		Int      *int
+		Str      *string
+		IntSlice []int
+	}{
+		{&i1, &s1, []int{i1, i2}},
+		{&i2, &s2, []int{i2, i1}},
+	}
+
+	want := `
++-----+-----+----------+
+| INT | STR | INTSLICE |
++-----+-----+----------+
+| 1   |  a  |    [1 2] |
+| 2   |  b  |    [2 1] |
++-----+-----+----------+
+`[1:]
+
+	tb.SetContent(cont)
+	tb.SetColMinWidth(2, 8)
+	tb.SetColumnAlignment("<|>")
+	tb.Render()
 
 	checkEqual(t, buf.String(), want)
 }
