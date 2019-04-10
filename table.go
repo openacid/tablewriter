@@ -128,6 +128,9 @@ func (t *Table) SetContent(rows interface{}) {
 	// set header
 	headers := []string{}
 	et := rs.Type().Elem()
+	if et.Kind() == reflect.Ptr {
+		et = et.Elem()
+	}
 	for i := 0; i < et.NumField(); i++ {
 		ft := et.Field(i)
 		headers = append(headers, ft.Name)
@@ -136,10 +139,10 @@ func (t *Table) SetContent(rows interface{}) {
 	strRows := [][]string{}
 	for i := 0; i < rs.Len(); i++ {
 		strRow := []string{}
-		row := rs.Index(i)
+		row := reflect.Indirect(rs.Index(i))
 
 		for j := 0; j < row.NumField(); j++ {
-			v := row.Field(j).Interface()
+			v := reflect.Indirect(row.Field(j)).Interface()
 			strRow = append(strRow, fmt.Sprintf("%v", v))
 		}
 
