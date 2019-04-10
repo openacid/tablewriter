@@ -1112,6 +1112,42 @@ func TestCustomAlignString(t *testing.T) {
 	checkEqual(t, buf.String(), want)
 }
 
+func TestSetContent(t *testing.T) {
+
+	var (
+		buf   = &bytes.Buffer{}
+		table = NewWriter(buf)
+
+		cont = []struct {
+			Int      int
+			Str      string
+			IntSlice []int
+		}{
+			{1, "a", []int{1, 2, 3}},
+			{2, "b", []int{2, 4, 6}},
+		}
+
+		footer = []string{"a", "b", "cccc"}
+		want   = `
++-----+-----+----------+
+| INT | STR | INTSLICE |
++-----+-----+----------+
+| 1   |  a  |  [1 2 3] |
+| 2   |  b  |  [2 4 6] |
++-----+-----+----------+
+|  A  |  B  |   CCCC   |
++-----+-----+----------+
+`[1:]
+	)
+	table.SetContent(cont)
+	table.SetFooter(footer)
+	table.SetColMinWidth(2, 8)
+	table.SetColumnAlignment("<|>")
+	table.Render()
+
+	checkEqual(t, buf.String(), want)
+}
+
 func TestTitle(t *testing.T) {
 	ts := []struct {
 		text string
