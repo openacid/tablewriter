@@ -135,7 +135,12 @@ func (t *Table) SetContent(rows interface{}) {
 	}
 	for i := 0; i < et.NumField(); i++ {
 		ft := et.Field(i)
-		headers = append(headers, ft.Name)
+		v, ok := ft.Tag.Lookup("tw-title")
+		if ok {
+			headers = append(headers, v)
+		} else {
+			headers = append(headers, ft.Name)
+		}
 	}
 
 	strRows := [][]string{}
@@ -159,7 +164,6 @@ func (t *Table) SetContent(rows interface{}) {
 func (t *Table) ClearHeader() {
 	t.headers = [][]string{}
 }
-
 
 // Render table output
 func (t *Table) Render() {
