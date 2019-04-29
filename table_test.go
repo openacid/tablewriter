@@ -1184,6 +1184,42 @@ func TestSetContentUseTagTitle(t *testing.T) {
 	checkEqual(t, buf.String(), want)
 }
 
+func TestSetContentUseTagFmt(t *testing.T) {
+
+	var (
+		buf = &bytes.Buffer{}
+		tb  = NewWriter(buf)
+
+		cont = []struct {
+			Int      int `tw-title:"tni" tw-fmt:"%02d"`
+			Str      string
+			IntSlice []int `tw-title:"fooslice"`
+		}{
+			{1, "a", []int{1, 2, 3}},
+			{2, "b", []int{2, 4, 6}},
+		}
+
+		footer = []string{"a", "b", "cccc"}
+		want   = `
++-----+-----+----------+
+| TNI | STR | FOOSLICE |
++-----+-----+----------+
+| 01  |  a  |  [1 2 3] |
+| 02  |  b  |  [2 4 6] |
++-----+-----+----------+
+|  A  |  B  |   CCCC   |
++-----+-----+----------+
+`[1:]
+	)
+	tb.SetContent(cont)
+	tb.SetFooter(footer)
+	tb.SetColMinWidth(2, 8)
+	tb.SetColumnAlignment("<|>")
+	tb.Render()
+
+	checkEqual(t, buf.String(), want)
+}
+
 func TestSetContentWithPointer(t *testing.T) {
 
 	buf := &bytes.Buffer{}
