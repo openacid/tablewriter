@@ -156,7 +156,15 @@ func (t *Table) SetContent(rows interface{}) {
 
 		for j := 0; j < row.NumField(); j++ {
 			v := reflect.Indirect(row.Field(j)).Interface()
-			strRow = append(strRow, fmt.Sprintf(fmts[j], v))
+
+			var s string
+			if fmts[j][len(fmts[j])-2:] == "%%" {
+				// special format: print as percentage.
+				s = fmt.Sprintf(fmts[j], v.(float64) * 100)
+			} else {
+				s = fmt.Sprintf(fmts[j], v)
+			}
+			strRow = append(strRow, s)
 		}
 
 		strRows = append(strRows, strRow)
