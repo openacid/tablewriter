@@ -129,17 +129,23 @@ func (t *Table) SetContent(rows interface{}) {
 
 	// set header
 	headers := []string{}
+	fmts := []string{}
 	et := rs.Type().Elem()
 	if et.Kind() == reflect.Ptr {
 		et = et.Elem()
 	}
 	for i := 0; i < et.NumField(); i++ {
 		ft := et.Field(i)
-		v, ok := ft.Tag.Lookup("tw-title")
-		if ok {
+		if v, ok := ft.Tag.Lookup("tw-title"); ok {
 			headers = append(headers, v)
 		} else {
 			headers = append(headers, ft.Name)
+		}
+
+		if v, ok := ft.Tag.Lookup("tw-fmt"); ok {
+			fmts = append(fmts, v)
+		} else {
+			fmts = append(fmts, "%v")
 		}
 	}
 
@@ -150,7 +156,7 @@ func (t *Table) SetContent(rows interface{}) {
 
 		for j := 0; j < row.NumField(); j++ {
 			v := reflect.Indirect(row.Field(j)).Interface()
-			strRow = append(strRow, fmt.Sprintf("%v", v))
+			strRow = append(strRow, fmt.Sprintf(fmts[j], v))
 		}
 
 		strRows = append(strRows, strRow)
