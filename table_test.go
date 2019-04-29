@@ -1192,23 +1192,24 @@ func TestSetContentUseTagFmt(t *testing.T) {
 
 		cont = []struct {
 			Int      int `tw-title:"tni" tw-fmt:"%02d"`
-			Str      string
+			Perc    float64 `tw-fmt:"%.1f%%"`
+			Float    float64 `tw-fmt:"%.1f"`
 			IntSlice []int `tw-title:"fooslice"`
 		}{
-			{1, "a", []int{1, 2, 3}},
-			{2, "b", []int{2, 4, 6}},
+			{1, 0.05, 0.05, []int{1, 2, 3}},
+			{2, 3.2, 3.2, []int{2, 4, 6}},
 		}
 
-		footer = []string{"a", "b", "cccc"}
+		footer = []string{"a", "b", "cccc", "d"}
 		want   = `
-+-----+-----+----------+
-| TNI | STR | FOOSLICE |
-+-----+-----+----------+
-| 01  |  a  |  [1 2 3] |
-| 02  |  b  |  [2 4 6] |
-+-----+-----+----------+
-|  A  |  B  |   CCCC   |
-+-----+-----+----------+
++-----+--------+----------+----------+
+| TNI |  PERC  |  FLOAT   | FOOSLICE |
++-----+--------+----------+----------+
+|  01 | 5.0%   |      0.1 | [1 2 3]  |
+|  02 | 320.0% |      3.2 | [2 4 6]  |
++-----+--------+----------+----------+
+|  A  |   B    |   CCCC   |    D     |
++-----+--------+----------+----------+
 `[1:]
 	)
 	tb.SetContent(cont)
